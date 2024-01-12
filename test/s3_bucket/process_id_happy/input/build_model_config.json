@@ -1,0 +1,15 @@
+{
+	"process_id": "happy",
+	"audio_features": [
+		"acousticness", 
+		"danceability", 
+		"energy", 
+		"instrumentalness", 
+		"liveness", 
+		"speechiness", 
+		"tempo",
+		"valence"
+	],
+	"model": "xgboost",
+	"output_dir": "test/s3_bucket/process_id_happy/output"
+}
