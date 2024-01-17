@@ -1,5 +1,16 @@
 {
+	"features": [
+	    "acousticness",
+	    "danceability",
+	    "energy",
+	    "instrumentalness",
+	    "liveness",
+	    "speechiness",
+	    "tempo",
+	    "valence"
+    ],
 	"target_column": "track_genre_top",
-	"create_target_encoder": true,
-	"test_size": 0.2
+	"create_target_encoder": false,
+	"test_size": 0.2,
+	"classifier_output_directory": "classifiers/spotify_genre_predictor/output/classifier"
 }

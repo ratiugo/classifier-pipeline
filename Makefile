@@ -18,9 +18,8 @@ auth: .FORCE
 spotify_data: .FORCE
 	PYTHONPATH=. python classifiers/spotify_genre_predictor/prepare_fma_dataset.py
 
-classifier: .FORCE
+train_classifier: .FORCE
 	./train_classifier.sh \
-		--data-file-name "classifiers/spotify_genre_predictor/input/data.csv" \
-		--classifier-config-file-name "classifiers/spotify_genre_predictor/input/config.json"
+		--config-file-name "classifiers/spotify_genre_predictor/input/config.json"
 
 .FORCE:

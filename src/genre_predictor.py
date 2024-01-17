@@ -31,9 +31,16 @@ CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.environ.get("SPOTIFY_CALLBACK_URI")
 SCOPE = "user-library-read"
 
-sp_oauth = SpotifyOAuth(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, scope=SCOPE)
+sp_oauth = SpotifyOAuth(
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
+    redirect_uri=REDIRECT_URI,
+    scope=SCOPE,
+)
 access_token = sp_oauth.get_access_token(as_dict=False)
 spotify = spotipy.Spotify(auth=access_token)
+
+
 class GenrePredictor(ABC):
     """
     Parent class to build a genre predicting model.
@@ -195,7 +202,7 @@ class XGBoostPredictor(GenrePredictor):
                 playlist_id = playlist["id"]
                 break
         playlist_data = spotify.playlist_tracks(playlist_id)
-        
+
         data_list = []
         for item in playlist_data.get("items"):
             track = item.get("track")
@@ -218,9 +225,20 @@ class XGBoostPredictor(GenrePredictor):
             })
 
         data = pd.DataFrame(data_list)
-        data = data[['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'tempo', 'valence']]
+        data = data[
+            [
+                "acousticness",
+                "danceability",
+                "energy",
+                "instrumentalness",
+                "liveness",
+                "speechiness",
+                "tempo",
+                "valence",
+            ]
+        ]
         # print(self.train_test_data["X_test"].columns)
-     
+
         prediction = self.predictor.predict(data)
         y_pred = self.label_encoder.inverse_transform(prediction)
         print(y_pred)
