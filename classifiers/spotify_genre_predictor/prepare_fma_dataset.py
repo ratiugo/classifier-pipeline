@@ -1,13 +1,15 @@
 """
 Script to prepare the FMA dataset for creating an XGBoost predictor.
 """
-from classifiers.spotify_genre_predictor import fma_utils
+
+import argparse
 import json
-import pandas as pd
+from classifiers.spotify_genre_predictor import fma_utils
+
 
 def prepare_fma_dataset(config_file_name: str):
     """
-    Prepare the FMA dataset to train a classifier for genre based on Spotify (Echo Nest) audio 
+    Prepare the FMA dataset to train a classifier for genre based on Spotify (Echo Nest) audio
     features
     """
     with open(config_file_name, encoding="utf-8") as config_file:
@@ -36,15 +38,12 @@ def prepare_fma_dataset(config_file_name: str):
     ]
     new_column_names = {col: col.split("_")[-1] for col in columns_to_rename}
     data = data.rename(columns=new_column_names)
-    data = data.dropna(
-        subset=["artist_name", "track_title", "track_genre_top"]
-    )
+    data = data.dropna(subset=["artist_name", "track_title", "track_genre_top"])
     data.reset_index(inplace=True)
     data = data[config.get("features")]
 
     data.to_csv("classifiers/spotify_genre_predictor/input/data.csv", index=False)
 
-    return 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -57,4 +56,3 @@ if __name__ == "__main__":
 
     kwargs = vars(parser.parse_args())
     prepare_fma_dataset(**kwargs)
-

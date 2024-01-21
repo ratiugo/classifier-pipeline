@@ -22,9 +22,7 @@ class Predict:
         with open(config_file_name, encoding="utf-8") as config_file:
             self.config = json.load(config_file)
 
-
     def run(self) -> Predict:
-    	"""
-    	Run the prediction pipeline
-    	"""
-    	
+        """
+        Run the prediction pipeline
+        """

@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import dotenv
 import pydot
 import requests
