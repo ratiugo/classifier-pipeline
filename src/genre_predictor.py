@@ -1,18 +1,5 @@
 # pylint: skip-file
 
-"""
-
-
-This module utilizes the FMA dataset to construct an XGBoost model for genre prediction based on 
-Spotify's available track features. While the dataset comprises a vast number of tracks, only 
-approximately 10,000 contain data for the specific audio features available in Spotify. This limited 
-subset might affect the model's accuracy.
-
-The current implementation focuses on predicting genre using Spotify-exposed audio features. 
-Future adaptations aim to extend support for predicting genres from actual song files. This 
-evolution would enable more comprehensive feature engineering and training on a larger song 
-dataset, potentially enhancing model performance.
-"""
 
 from __future__ import annotations
 import json

@@ -2,16 +2,32 @@
 Script to generate the prediction dataset for the Spotify genre predictor classifier.
 The dataset contains all the tracks in a playlist, with audio features used to train the classifier.
 
-This script takes a Spotify user and playlist name as inputs.
+This script takes a Spotify user, playlist name, and path to config file as inputs.
 """
 
 from __future__ import annotations
 import os
 import argparse
+import json
 from typing import List, Dict, Any
 import pandas as pd
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+
+
+def load_config(config_path: str) -> Dict[str, Any]:
+    """
+    Load the configuration from a JSON file.
+
+    Args:
+        config_path: Path to the JSON configuration file.
+
+    Returns:
+        Configuration dictionary.
+    """
+    with open(config_path, "r", encoding="utf-8") as config_file:
+        config = json.load(config_file)
+    return config
 
 
 def get_spotify_client() -> spotipy.Spotify:
@@ -108,7 +124,10 @@ def extract_track_data(
 
 
 def generate_predict_dataset(
-    user: str, playlist_name: str, spotify_client: spotipy.Spotify
+    user: str,
+    playlist_name: str,
+    spotify_client: spotipy.Spotify,
+    config: Dict[str, Any],
 ) -> None:
     """
     Generate a prediction dataset for a specific Spotify playlist.
@@ -117,6 +136,7 @@ def generate_predict_dataset(
         user: Spotify username of the playlist owner.
         playlist_name: Name of the playlist.
         spotify_client: Authenticated Spotify client.
+        config: Configuration dictionary with classifier columns.
 
     Saves a CSV file with the dataset.
     """
@@ -126,16 +146,7 @@ def generate_predict_dataset(
     data_list = [extract_track_data(spotify_client, item) for item in track_items]
     data = pd.DataFrame(data_list)
 
-    classifier_columns = [
-        "acousticness",
-        "danceability",
-        "energy",
-        "instrumentalness",
-        "liveness",
-        "speechiness",
-        "tempo",
-        "valence",
-    ]
+    classifier_columns = config["features"]
     data = data[classifier_columns]
 
     dir_name = os.path.join(
@@ -162,10 +173,17 @@ def main() -> None:
         type=str,
         help="Name of the playlist to predict the genre of",
     )
+    parser.add_argument(
+        "--config-file", required=True, type=str, help="Path to the configuration file"
+    )
 
     args = parser.parse_args()
     spotify_client = get_spotify_client()
-    generate_predict_dataset(args.spotify_user_name, args.playlist_name, spotify_client)
+    config = load_config(args.config_file)
+
+    generate_predict_dataset(
+        args.spotify_user_name, args.playlist_name, spotify_client, config
+    )
 
 
 if __name__ == "__main__":

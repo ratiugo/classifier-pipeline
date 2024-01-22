@@ -1,3 +1,4 @@
+# pylint: skip-file
 """
 Make predictions with a trained classifier model
 """

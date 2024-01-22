@@ -16,7 +16,8 @@ auth: .FORCE
 	PYTHONPATH=. python spotify_auth.py
 
 spotify_data: .FORCE
-	PYTHONPATH=. python classifiers/spotify_genre_predictor/prepare_fma_dataset.py
+	PYTHONPATH=. python classifiers/spotify_genre_predictor/prepare_fma_dataset.py\
+		--config-file-name classifiers/spotify_genre_predictor/input/config.json
 
 train_classifier: .FORCE
 	./train_classifier.sh \
@@ -25,6 +26,7 @@ train_classifier: .FORCE
 spotify_predict_dataset: .FORCE
 	PYTHONPATH=. python classifiers/spotify_genre_predictor/generate_predict_dataset.py \
 		--spotify-user-name ratiugo \
-		--playlist-name Jid
+		--playlist-name Jid \
+		--config-file-name classifiers/spotify_genre_predictor/input/config.json
 
 .FORCE:
